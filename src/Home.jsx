@@ -3,7 +3,7 @@ import axios from 'axios';
 import Todo from './Todo';
 import Doing from './Doing';
 import Done from './Done';
-import { Link } from 'react-router-dom'
+import { Link } from 'react-router-dom';
 
 const Home = () => {
   const [taskText, setTaskText] = useState('');
@@ -11,7 +11,8 @@ const Home = () => {
   const [doingTasks, setDoingTasks] = useState([]);
   const [doneTasks, setDoneTasks] = useState([]);
 
-  const API_URL = 'http://localhost:5000'; // JSON Server URL
+  // Corrected API_URL to use import.meta.env
+  const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3000'; // Use environment variable or fallback to localhost:3000
 
   // Fetch tasks from db.json
   useEffect(() => {
@@ -30,7 +31,7 @@ const Home = () => {
     };
 
     fetchTasks();
-  }, []);
+  }, [API_URL]); // Added API_URL to the dependency array to react to changes in the environment variable
 
   // Add a task
   const addTask = async () => {
@@ -90,11 +91,13 @@ const Home = () => {
 
   return (
     <div>
-      <Link  to='/'  style={{fontSize:'20px',marginTop:'10px', marginLeft: '1300px' , background: 'rgb(254, 164, 179)', padding: '10px 20px', borderRadius: '10px', color: 'rgb(95, 95, 223)', textDecoration: 'none', fontWeight: 'bold', display: 'inline-block', boxShadow: '0 4px 8px rgba(0, 0, 0, 0.3)',  transition: 'transform 0.1s ease' }} onMouseDown={(e) => e.target.style.transform = 'translateY(2px)'} onMouseUp={(e) => e.target.style.transform = 'translateY(0)'}>Back to Landing</Link>
+      <Link to='/' style={{ fontSize: '20px', marginTop: '10px', marginLeft: '1300px', background: 'rgb(254, 164, 179)', padding: '10px 20px', borderRadius: '10px', color: 'rgb(95, 95, 223)', textDecoration: 'none', fontWeight: 'bold', display: 'inline-block', boxShadow: '0 4px 8px rgba(0, 0, 0, 0.3)', transition: 'transform 0.1s ease' }} onMouseDown={(e) => e.target.style.transform = 'translateY(2px)'} onMouseUp={(e) => e.target.style.transform = 'translateY(0)'}>Back to Landing</Link>
+      
       <h1 style={{ color: 'white', textAlign: 'center', display: 'flex', alignItems: 'center', marginLeft: '460px' }}>
         To-Do List Management
         <img style={{ width: '250px' }} src="/images/bg2.png" alt="" />
       </h1>
+      
       <input
         value={taskText}
         onChange={(e) => setTaskText(e.target.value)}
@@ -112,6 +115,7 @@ const Home = () => {
         type="text"
         placeholder="Enter a new task"
       />
+      
       <button
         onClick={addTask}
         className='submit'
@@ -125,7 +129,7 @@ const Home = () => {
           border: 'none',
           boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1)',
           transition: 'all 0.2s ease',
-          cursor:'pointer'
+          cursor: 'pointer'
         }}
       >
         Add Task
@@ -141,3 +145,4 @@ const Home = () => {
 };
 
 export default Home;
+
